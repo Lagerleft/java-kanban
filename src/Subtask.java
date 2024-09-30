@@ -22,8 +22,6 @@ public class Subtask extends Task {
     }
 
     //**Сеттеры и геттеры
-
-
     public int getEpicID() {
         return epicID;
     }

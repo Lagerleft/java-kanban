@@ -2,12 +2,11 @@ import java.util.ArrayList;
 
 public class Epic extends Task {
 
-    private ArrayList<Integer> subtaskIDs;
+    private final ArrayList<Integer> subtaskIDs = new ArrayList<>();
 
     //**Создание объекта Epic
-    public Epic(String taskName, String description, Statuses status) {
-        super(taskName, description, status);
-        this.subtaskIDs = new ArrayList<>();
+    public Epic(String taskName, String description) {
+        super(taskName, description, Statuses.NEW);
     }
 
 //**Переопределения методов
@@ -26,10 +25,6 @@ public class Epic extends Task {
 
     public void addSubtaskID(int taskID) {
         this.subtaskIDs.add(taskID);
-    }
-
-    public void setSubtaskIDsList(ArrayList<Integer> newSubtasksList) {
-        this.subtaskIDs = newSubtasksList;
     }
 
     public ArrayList<Integer> getSubtaskIDs() {
