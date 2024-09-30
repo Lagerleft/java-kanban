@@ -1,3 +1,5 @@
+import model.*;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -33,13 +35,13 @@ public class Main {
 
 //**Распечатать измененные таски, эпик и сабтаски поштучно
         System.out.println();
-        System.out.println("Обновленный Epic: ");
+        System.out.println("Обновленный model.Epic: ");
         System.out.println(manager.getEpicByGlobalID(3));
         System.out.println();
-        System.out.println("Обновленный Task: ");
+        System.out.println("Обновленный model.Task: ");
         System.out.println(manager.getTaskByGlobalID(2));
         System.out.println();
-        System.out.println("Обновленный Subtask: ");
+        System.out.println("Обновленный model.Subtask: ");
         System.out.println(manager.getSubtaskByGlobalID(7));
 
 //**Распечатать и удалить эпик, распечатать сабтаски после удаления

@@ -1,10 +1,12 @@
+package model;
+
 public class Task {
 
     private String taskName;
     private String description;
     private Statuses status;
 
-    //**Создание объекта Task
+    //**Создание объекта model.Task
     public Task(String taskName, String description, Statuses status) {
         this.taskName = taskName;
         this.description = description;
@@ -14,14 +16,14 @@ public class Task {
     //**Переопределения методов
     @Override
     public String toString() {
-        return "Task{" +
+        return "model.Task{" +
                 "taskName='" + taskName + '\'' +
                 ", description='" + description + '\'' +
                 ", status=" + status +
                 '}';
     }
 
-//**Геттеры по переменным Task
+//**Геттеры по переменным model.Task
 
     public String getTaskName() {
         return taskName;

@@ -1,8 +1,9 @@
+package model;
 
 public class Subtask extends Task {
     private final int epicID;
 
-    //**Создание объекта Subtask
+    //**Создание объекта model.Subtask
     public Subtask(String taskName, String description, Statuses status, int epicID) {
         super(taskName, description, status);
         this.epicID = epicID;
@@ -13,7 +14,7 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        return "Subtask{" +
+        return "model.Subtask{" +
                 "subtaskName='" + super.getTaskName() + '\'' +
                 ", description='" + super.getDescription() + '\'' +
                 ", status=" + super.getStatus() +

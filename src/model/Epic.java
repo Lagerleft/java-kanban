@@ -1,10 +1,12 @@
+package model;
+
 import java.util.ArrayList;
 
 public class Epic extends Task {
 
     private final ArrayList<Integer> subtaskIDs = new ArrayList<>();
 
-    //**Создание объекта Epic
+    //**Создание объекта model.Epic
     public Epic(String taskName, String description) {
         super(taskName, description, Statuses.NEW);
     }
@@ -13,7 +15,7 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return "Epic{" +
+        return "model.Epic{" +
                 "epicName='" + super.getTaskName() + '\'' +
                 ", description='" + super.getDescription() + '\'' +
                 ", status=" + super.getStatus() +
@@ -21,7 +23,7 @@ public class Epic extends Task {
                 '}';
     }
 
-//**Сеттеры и геттеры по переменным Epic
+//**Сеттеры и геттеры по переменным model.Epic
 
     public void addSubtaskID(int taskID) {
         this.subtaskIDs.add(taskID);

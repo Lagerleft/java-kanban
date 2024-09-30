@@ -1,3 +1,5 @@
+package model;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -7,7 +9,7 @@ public class TaskManager {
     private final HashMap<Integer, Epic> epics = new HashMap<>();
     private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
 
-    //**Создание задач (Task, Epic, Subtask) в менеджере
+    //**Создание задач (model.Task, model.Epic, model.Subtask) в менеджере
     public void createNewTask(Task task) {
         tasks.put(getTaskGlobalID(), task);
         increaseTaskGlobalID();
@@ -184,7 +186,7 @@ public class TaskManager {
         }
     }
 
-//**Сеттеры и геттеры для переменных TaskManager
+//**Сеттеры и геттеры для переменных model.TaskManager
 
     public int getTaskGlobalID() {
         return taskGlobalID;
