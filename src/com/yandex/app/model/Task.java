@@ -1,12 +1,13 @@
-package model;
+package com.yandex.app.model;
 
 public class Task {
 
     private String taskName;
     private String description;
     private Statuses status;
+    private int taskID;
 
-    //**Создание объекта model.Task
+    //**Создание объекта com.yandex.app.model.Task
     public Task(String taskName, String description, Statuses status) {
         this.taskName = taskName;
         this.description = description;
@@ -16,14 +17,15 @@ public class Task {
     //**Переопределения методов
     @Override
     public String toString() {
-        return "model.Task{" +
-                "taskName='" + taskName + '\'' +
+        return "com.yandex.app.model.Task{" +
+                "ID= " + getTaskID() +
+                ", taskName='" + taskName + '\'' +
                 ", description='" + description + '\'' +
                 ", status=" + status +
                 '}';
     }
 
-//**Геттеры по переменным model.Task
+//**Геттеры по переменным com.yandex.app.model.Task
 
     public String getTaskName() {
         return taskName;
@@ -39,5 +41,13 @@ public class Task {
 
     public void setStatus(Statuses status) {
         this.status = status;
+    }
+
+    public int getTaskID() {
+        return taskID;
+    }
+
+    public void setTaskID(int taskID) {
+        this.taskID = taskID;
     }
 }

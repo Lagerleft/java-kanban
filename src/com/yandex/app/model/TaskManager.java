@@ -1,4 +1,4 @@
-package model;
+package com.yandex.app.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,81 +9,79 @@ public class TaskManager {
     private final HashMap<Integer, Epic> epics = new HashMap<>();
     private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
 
-    //**Создание задач (model.Task, model.Epic, model.Subtask) в менеджере
+    //**Создание задач (com.yandex.app.model.Task, com.yandex.app.model.Epic, com.yandex.app.model.Subtask) в менеджере
     public void createNewTask(Task task) {
         tasks.put(getTaskGlobalID(), task);
+        task.setTaskID(getTaskGlobalID());
         increaseTaskGlobalID();
     }
 
     public void createNewEpic(Epic epic) {
         epics.put(getTaskGlobalID(), epic);
+        epic.setTaskID(getTaskGlobalID());
         increaseTaskGlobalID();
     }
 
     public void createNewSubtask(Subtask subtask) {
         subtasks.put(getTaskGlobalID(), subtask);
         int ID = getTaskGlobalID();
+        subtask.setTaskID(getTaskGlobalID());
         increaseTaskGlobalID();
         Epic tempEpic = epics.get(subtask.getEpicID());
         tempEpic.addSubtaskID(ID);
-        updateEpicByGlobalID(subtask.getEpicID(), tempEpic);
         checkAndSetEpicStatus(subtask.getEpicID());
     }
 
     //**Получение задач (tasks, epics, subtasks) по taskGlobalID в менеджере
-    public Task getTaskByGlobalID(int taskGlobalID) {
-        return tasks.get(taskGlobalID);
+    public Task getTaskByGlobalID(int taskID) {
+        return tasks.get(taskID);
     }
 
-    public Epic getEpicByGlobalID(int taskGlobalID) {
-        return epics.get(taskGlobalID);
+    public Epic getEpicByGlobalID(int taskID) {
+        return epics.get(taskID);
     }
 
-    public Subtask getSubtaskByGlobalID(int taskGlobalID) {
-        return subtasks.get(taskGlobalID);
+    public Subtask getSubtaskByGlobalID(int taskID) {
+        return subtasks.get(taskID);
     }
 
     //**Обновление задач (tasks, epics, subtasks) по taskGlobalID
-    public void updateTaskByGlobalID(int taskGlobalID, Task newTask) {
-        for (Integer ID : tasks.keySet()) {
-            if (taskGlobalID == ID) {
-                tasks.put(ID, newTask);
-                break;
-            }
+    public void updateTask(Task newTask) {
+        if (tasks.containsKey(newTask.getTaskID())) {
+            tasks.put(newTask.getTaskID(), newTask);
         }
     }
 
-    public void updateEpicByGlobalID(int taskGlobalID, Epic newEpic) {
-        for (Integer ID : epics.keySet()) {
-            if (taskGlobalID == ID) {
-                epics.put(ID, newEpic);
-                checkAndSetEpicStatus(taskGlobalID);
-                break;
-            }
+    public void updateEpic(Epic newEpic) {
+        if (epics.containsKey(newEpic.getTaskID())) {
+            epics.put(newEpic.getTaskID(), newEpic);
         }
     }
 
-    public void updateSubtaskByGlobalID(int taskGlobalID, Subtask newSubtask) {
-        for (Integer ID : subtasks.keySet()) {
-            if (taskGlobalID == ID) {
-                subtasks.put(ID, newSubtask);
-                checkAndSetEpicStatus(newSubtask.getEpicID());
-                break;
-            }
+    public void updateSubtask(Subtask newSubtask) {
+        if (subtasks.containsKey(newSubtask.getTaskID())) {
+            subtasks.put(newSubtask.getTaskID(), newSubtask);
+            checkAndSetEpicStatus(newSubtask.getEpicID());
         }
     }
 
     //**Получение списка всех задач
-    public HashMap<Integer, Task> getTasks() {
-        return tasks;
+    public ArrayList<Task> getAllTasks() {
+        ArrayList<Task> list = new ArrayList<>();
+        list.addAll(tasks.values());
+        return list;
     }
 
-    public HashMap<Integer, Epic> getEpics() {
-        return epics;
+    public ArrayList<Task> getAllEpics() {
+        ArrayList<Task> list = new ArrayList<>();
+        list.addAll(epics.values());
+        return list;
     }
 
-    public HashMap<Integer, Subtask> getSubtasks() {
-        return subtasks;
+    public ArrayList<Task> getAllSubtasks() {
+        ArrayList<Task> list = new ArrayList<>();
+        list.addAll(subtasks.values());
+        return list;
     }
 
     //**Удаление всех задач
@@ -98,9 +96,9 @@ public class TaskManager {
 
     public void deleteAllSubtasks() {
         subtasks.clear();
-        for (Integer epicID : epics.keySet()) { //**Удаляем сабтаски из всех эпиков
-            deleteAllSubtasksFromOneEpic(epicID);
-            checkAndSetEpicStatus(epicID);
+        for (Epic epic : epics.values()) { //**Удаляем сабтаски из всех эпиков
+            epic.clearSubtasks();
+            checkAndSetEpicStatus(epic.getTaskID());
         }
     }
 
@@ -131,16 +129,15 @@ public class TaskManager {
 
 //**Получение списка всех подзадач определенного эпика
 
-    public HashMap<Integer, Subtask> getSubtasksForEpic(int epicID) {
-        HashMap<Integer, Subtask> specificSubtasks = new HashMap<>();
-        for (Integer key : subtasks.keySet()) {
-            Subtask tempSubtask = subtasks.get(key);
-            if (tempSubtask.getEpicID() == epicID) {
-                specificSubtasks.put(key, tempSubtask);
-            }
+    public ArrayList<Task> getSubtasksForEpic(int epicID) {
+        ArrayList<Task> list = new ArrayList<>();
+        Epic epic = epics.get(epicID);
+        for (Integer sID : epic.getSubtaskIDs()) {
+            list.add(subtasks.get(sID));
         }
-        return specificSubtasks;
+        return list;
     }
+
 
 //**Вспомогательные методы
 
@@ -186,7 +183,7 @@ public class TaskManager {
         }
     }
 
-//**Сеттеры и геттеры для переменных model.TaskManager
+//**Сеттеры и геттеры для переменных com.yandex.app.model.TaskManager
 
     public int getTaskGlobalID() {
         return taskGlobalID;

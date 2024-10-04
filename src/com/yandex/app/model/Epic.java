@@ -1,4 +1,4 @@
-package model;
+package com.yandex.app.model;
 
 import java.util.ArrayList;
 
@@ -6,7 +6,7 @@ public class Epic extends Task {
 
     private final ArrayList<Integer> subtaskIDs = new ArrayList<>();
 
-    //**Создание объекта model.Epic
+    //**Создание объекта com.yandex.app.model.Epic
     public Epic(String taskName, String description) {
         super(taskName, description, Statuses.NEW);
     }
@@ -15,15 +15,16 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return "model.Epic{" +
-                "epicName='" + super.getTaskName() + '\'' +
+        return "com.yandex.app.model.Epic{" +
+                "ID= " + super.getTaskID() +
+                ", epicName='" + super.getTaskName() + '\'' +
                 ", description='" + super.getDescription() + '\'' +
                 ", status=" + super.getStatus() +
                 ", subtasks=" + getSubtaskIDs() +
                 '}';
     }
 
-//**Сеттеры и геттеры по переменным model.Epic
+//**Сеттеры и геттеры по переменным com.yandex.app.model.Epic
 
     public void addSubtaskID(int taskID) {
         this.subtaskIDs.add(taskID);
