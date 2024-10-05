@@ -1,6 +1,7 @@
-package com.yandex.app;
+package com.yandex.TM;
 
-import com.yandex.app.model.*;
+import com.yandex.TM.model.*;
+import com.yandex.TM.service.TaskManager;
 
 public class Main {
 
@@ -30,13 +31,16 @@ public class Main {
         System.out.println("Список всех Subtasks: ");
         System.out.println(manager.getAllSubtasks());
 
-//**Обновить таск и сабтаск новыми значениями
+//**Обновить таск и сабтаск и эпик новыми значениями
         Task taskUpdated = new Task ("Охладить еду", "Надо охладить еду перед завтраком", Statuses.IN_PROGRESS);
         Subtask subtaskUpdated = new Subtask("Забронировать другую гостиницу", "Отменить одну бронь, сделать другую", Statuses.IN_PROGRESS, 3);
+        Epic epicUpdated = new Epic ("Отпуск-2", "Приготовиться к зимнему отпуску");
         taskUpdated.setTaskID(1);
         subtaskUpdated.setTaskID(8);
+        epicUpdated.setTaskID(3);
         manager.updateTask(taskUpdated);
         manager.updateSubtask(subtaskUpdated);
+        manager.updateEpic(epicUpdated);
 
 
 //**Распечатать измененные таски, эпик и сабтаски поштучно
@@ -45,10 +49,10 @@ public class Main {
         System.out.println(manager.getEpicByGlobalID(3));
         System.out.println();
         System.out.println("Обновленный com.yandex.app.model.Task: ");
-        System.out.println(manager.getTaskByGlobalID(2));
+        System.out.println(manager.getTaskByGlobalID(1));
         System.out.println();
         System.out.println("Обновленный com.yandex.app.model.Subtask: ");
-        System.out.println(manager.getSubtaskByGlobalID(7));
+        System.out.println(manager.getSubtaskByGlobalID(8));
 
 //**Распечатать и удалить эпик, распечатать сабтаски после удаления
         System.out.println();
@@ -60,8 +64,13 @@ public class Main {
         System.out.println("Список всех Subtasks: ");
         System.out.println(manager.getAllSubtasks());
 
+        System.out.println("Удаляем сабтаск:");
+        manager.deleteOneSubtask(5);
+
         System.out.println("Все таски:");
         System.out.println(manager.getAllTasks());
+        System.out.println("Все сабтаски:");
+        System.out.println(manager.getAllSubtasks());
         System.out.println("Сабтаски для эпика 3:");
         System.out.println(manager.getSubtasksForEpic(3));
 

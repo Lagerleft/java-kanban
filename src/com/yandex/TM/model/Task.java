@@ -1,4 +1,4 @@
-package com.yandex.app.model;
+package com.yandex.TM.model;
 
 public class Task {
 
@@ -49,5 +49,13 @@ public class Task {
 
     public void setTaskID(int taskID) {
         this.taskID = taskID;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

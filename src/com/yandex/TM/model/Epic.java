@@ -1,4 +1,4 @@
-package com.yandex.app.model;
+package com.yandex.TM.model;
 
 import java.util.ArrayList;
 
@@ -26,8 +26,12 @@ public class Epic extends Task {
 
 //**Сеттеры и геттеры по переменным com.yandex.app.model.Epic
 
-    public void addSubtaskID(int taskID) {
-        this.subtaskIDs.add(taskID);
+    public void addSubtaskID(int etaskID) {
+        this.subtaskIDs.add(etaskID);
+    }
+
+    public void deleteSubtaskID(int taskID) {
+        this.subtaskIDs.remove((Integer) taskID);
     }
 
     public ArrayList<Integer> getSubtaskIDs() {

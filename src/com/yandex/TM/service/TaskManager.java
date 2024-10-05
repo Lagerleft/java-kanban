@@ -1,4 +1,9 @@
-package com.yandex.app.model;
+package com.yandex.TM.service;
+
+import com.yandex.TM.model.Epic;
+import com.yandex.TM.model.Statuses;
+import com.yandex.TM.model.Subtask;
+import com.yandex.TM.model.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,24 +16,23 @@ public class TaskManager {
 
     //**Создание задач (com.yandex.app.model.Task, com.yandex.app.model.Epic, com.yandex.app.model.Subtask) в менеджере
     public void createNewTask(Task task) {
-        tasks.put(getTaskGlobalID(), task);
-        task.setTaskID(getTaskGlobalID());
-        increaseTaskGlobalID();
+        final int taskID = getTaskGlobalID();
+        tasks.put(taskID, task);
+        task.setTaskID(taskID);
     }
 
     public void createNewEpic(Epic epic) {
-        epics.put(getTaskGlobalID(), epic);
-        epic.setTaskID(getTaskGlobalID());
-        increaseTaskGlobalID();
+        final int epicID = getTaskGlobalID();
+        epics.put(epicID, epic);
+        epic.setTaskID(epicID);
     }
 
     public void createNewSubtask(Subtask subtask) {
-        subtasks.put(getTaskGlobalID(), subtask);
-        int ID = getTaskGlobalID();
-        subtask.setTaskID(getTaskGlobalID());
-        increaseTaskGlobalID();
+        final int subtaskID = getTaskGlobalID();
+        subtasks.put(subtaskID, subtask);
+        subtask.setTaskID(subtaskID);
         Epic tempEpic = epics.get(subtask.getEpicID());
-        tempEpic.addSubtaskID(ID);
+        tempEpic.addSubtaskID(subtaskID);
         checkAndSetEpicStatus(subtask.getEpicID());
     }
 
@@ -53,8 +57,10 @@ public class TaskManager {
     }
 
     public void updateEpic(Epic newEpic) {
-        if (epics.containsKey(newEpic.getTaskID())) {
-            epics.put(newEpic.getTaskID(), newEpic);
+        final Epic oldEpic = epics.get(newEpic.getTaskID());
+        if (oldEpic != null) {
+            oldEpic.setTaskName(newEpic.getTaskName());
+            oldEpic.setDescription(newEpic.getDescription());
         }
     }
 
@@ -67,21 +73,15 @@ public class TaskManager {
 
     //**Получение списка всех задач
     public ArrayList<Task> getAllTasks() {
-        ArrayList<Task> list = new ArrayList<>();
-        list.addAll(tasks.values());
-        return list;
+        return new ArrayList<>(tasks.values());
     }
 
     public ArrayList<Task> getAllEpics() {
-        ArrayList<Task> list = new ArrayList<>();
-        list.addAll(epics.values());
-        return list;
+        return new ArrayList<>(epics.values());
     }
 
     public ArrayList<Task> getAllSubtasks() {
-        ArrayList<Task> list = new ArrayList<>();
-        list.addAll(subtasks.values());
-        return list;
+        return new ArrayList<>(subtasks.values());
     }
 
     //**Удаление всех задач
@@ -108,23 +108,17 @@ public class TaskManager {
     }
 
     public void deleteOneEpic(int epicID) {
-        epics.remove(epicID);
         deleteEpicAssignmentInSubtask(epicID);
+        epics.remove(epicID);
     }
 
     public void deleteOneSubtask(int subtaskID) {
-        subtasks.remove(subtaskID);
-        for (Integer epicID : epics.keySet()) {
-            Epic tempEpic = epics.get(epicID);
-            ArrayList<Integer> tempSubtaskList = tempEpic.getSubtaskIDs();
-            for (int subtask : tempSubtaskList) {
-                if (subtask == subtaskID) {
-                    tempSubtaskList.remove(subtask);
-                }
-            }
-            epics.put(epicID, tempEpic);
-            checkAndSetEpicStatus(epicID);
-        }
+        int epicID = subtasks.get(subtaskID).getEpicID();
+        Epic tempEpic = epics.get(epicID);
+
+        tempEpic.deleteSubtaskID(subtaskID);
+        checkAndSetEpicStatus(epicID);
+        subtasks.remove(subtaskID); //удалить сабтаск
     }
 
 //**Получение списка всех подзадач определенного эпика
@@ -138,58 +132,43 @@ public class TaskManager {
         return list;
     }
 
-
 //**Вспомогательные методы
 
     public void deleteEpicAssignmentInSubtask(int epicID) {
-        for (Integer key : subtasks.keySet()) {
-            Subtask tempSubtask = subtasks.get(key);
-            if (tempSubtask.getEpicID() == epicID) {
-                subtasks.remove(key);
-            }
+        Epic tempEpic = epics.get(epicID);
+        for (Integer id : tempEpic.getSubtaskIDs()) {
+            subtasks.remove(id);
         }
     }
 
-    public void deleteAllSubtasksFromOneEpic(int epicID) {
-        Epic tempEpic = epics.get(epicID);
-        tempEpic.clearSubtasks();
-        epics.put(epicID, tempEpic);
-    }
-
-    public void checkAndSetEpicStatus(int epicID) {
+    private void checkAndSetEpicStatus(int epicID) {
         Epic tempEpic = epics.get(epicID);
         ArrayList<Integer> tempEpicSubtaskList = tempEpic.getSubtaskIDs();
-        int checkAllNew = 1;
-        int checkAllDone = 1;
+        boolean checkAllNew = true;
+        boolean checkAllDone = true;
 
-        if (!tempEpicSubtaskList.isEmpty()) {
-            for (int i = 0; i < tempEpicSubtaskList.size(); i++) {
-                int st1 = tempEpicSubtaskList.get(i);
-                Subtask tempSubtask = subtasks.get(st1);
-                if (tempSubtask.getStatus() != Statuses.NEW) {
-                    checkAllNew = 0;
-                }
-                if (tempSubtask.getStatus() != Statuses.DONE) {
-                    checkAllDone = 0;
-                }
+        for (int subtaskId : tempEpicSubtaskList) {
+            Subtask tempSubtask = subtasks.get(subtaskId);
+            if (tempSubtask.getStatus() != Statuses.NEW) {
+                checkAllNew = false;
+            }
+            if (tempSubtask.getStatus() != Statuses.DONE) {
+                checkAllDone = false;
             }
         }
-        if (checkAllNew == 1) {
+
+        if (checkAllNew) {
             tempEpic.setStatus(Statuses.NEW);
-        } else if (checkAllDone == 1) {
+        } else if (checkAllDone) {
             tempEpic.setStatus(Statuses.DONE);
         } else {
             tempEpic.setStatus(Statuses.IN_PROGRESS);
         }
     }
 
-//**Сеттеры и геттеры для переменных com.yandex.app.model.TaskManager
+//**Сеттеры и геттеры для переменных com.yandex.app.service.TaskManager
 
     public int getTaskGlobalID() {
-        return taskGlobalID;
-    }
-
-    public void increaseTaskGlobalID() {
-        taskGlobalID++;
+        return taskGlobalID++;
     }
 }
