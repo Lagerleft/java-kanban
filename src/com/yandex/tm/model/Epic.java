@@ -4,18 +4,23 @@ import java.util.ArrayList;
 
 public class Epic extends Task {
 
-    private final ArrayList<Integer> subtaskIDs = new ArrayList<>();
+    private ArrayList<Integer> subtaskIDs = new ArrayList<>();
 
     //**Создание объекта com.yandex.app.model.Epic
     public Epic(String taskName, String description) {
         super(taskName, description, Statuses.NEW);
     }
 
+    public Epic(String taskName, String description, Statuses status, ArrayList<Integer> subtaskIDs) {
+        super(taskName, description, Statuses.NEW);
+        this.subtaskIDs = subtaskIDs;
+    }
+
 //**Переопределения методов
 
     @Override
     public String toString() {
-        return "com.yandex.app.model.Epic{" +
+        return "Epic{" +
                 "ID= " + super.getTaskID() +
                 ", epicName='" + super.getTaskName() + '\'' +
                 ", description='" + super.getDescription() + '\'' +
@@ -40,6 +45,10 @@ public class Epic extends Task {
 
     public void clearSubtasks() {
         this.subtaskIDs.clear();
+    }
+
+    public void setSubtaskIDs(ArrayList<Integer> subtaskIDs) {
+        this.subtaskIDs = subtaskIDs;
     }
 
 }

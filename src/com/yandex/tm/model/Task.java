@@ -14,10 +14,17 @@ public class Task {
         this.status = status;
     }
 
+    public Task(String taskName, String description, Statuses status, int taskID) {
+        this.taskName = taskName;
+        this.description = description;
+        this.status = status;
+        this.taskID = taskID;
+    }
+
     //**Переопределения методов
     @Override
     public String toString() {
-        return "com.yandex.app.model.Task{" +
+        return "Task{" +
                 "ID= " + getTaskID() +
                 ", taskName='" + taskName + '\'' +
                 ", description='" + description + '\'' +

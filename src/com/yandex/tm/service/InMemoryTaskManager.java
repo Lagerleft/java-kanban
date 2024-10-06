@@ -45,7 +45,9 @@ public class InMemoryTaskManager implements TaskManager {
     public Task getTask(int taskID) {
         Task task = tasks.get(taskID);
         if (task != null) {
-           historyMan.add(task);
+            Task newTask = new Task(task.getTaskName(), task.getDescription(), task.getStatus());
+            newTask.setTaskID(task.getTaskID());
+           historyMan.add(newTask);
         }
         return task;
     }
@@ -54,7 +56,11 @@ public class InMemoryTaskManager implements TaskManager {
     public Epic getEpic(int taskID) {
         Epic epic = epics.get(taskID);
         if (epic != null) {
-            historyMan.add(epic);
+            Epic newEpic = new Epic(epic.getTaskName(), epic.getDescription());
+            newEpic.setTaskID(epic.getTaskID());
+            newEpic.setSubtaskIDs (epic.getSubtaskIDs());
+            newEpic.setStatus(epic.getStatus());
+            historyMan.add(newEpic);
         }
         return epic;
     }
@@ -63,7 +69,9 @@ public class InMemoryTaskManager implements TaskManager {
     public Subtask getSubtask(int taskID) {
         Subtask subtask = subtasks.get(taskID);
         if (subtask != null) {
-            historyMan.add(subtask);
+            Subtask newSubtask = new Subtask(subtask.getTaskName(), subtask.getDescription(), subtask.getStatus(), subtask.getEpicID());
+            newSubtask.setTaskID(subtask.getTaskID());
+            historyMan.add(newSubtask);
         }
         return subtask;
     }
@@ -100,13 +108,13 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Task> getAllEpics() {
-        return new ArrayList<>(epics.values());
+    public ArrayList<Epic> getAllEpics() {
+        return new ArrayList<Epic>(epics.values());
     }
 
     @Override
-    public ArrayList<Task> getAllSubtasks() {
-        return new ArrayList<>(subtasks.values());
+    public ArrayList<Subtask> getAllSubtasks() {
+        return new ArrayList<Subtask>(subtasks.values());
     }
 
     //**Удаление всех задач

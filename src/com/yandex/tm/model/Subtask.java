@@ -9,12 +9,11 @@ public class Subtask extends Task {
         this.epicID = epicID;
     }
 
-
 //**Переопределения методов
 
     @Override
     public String toString() {
-        return "com.yandex.app.model.Subtask{" +
+        return "Subtask{" +
                 "ID= " + super.getTaskID() +
                 ", subtaskName='" + super.getTaskName() + '\'' +
                 ", description='" + super.getDescription() + '\'' +

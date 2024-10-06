@@ -24,8 +24,8 @@ public interface TaskManager {
 
     //**Получение списка всех задач
     ArrayList<Task> getAllTasks();
-    ArrayList<Task> getAllEpics();
-    ArrayList<Task> getAllSubtasks();
+    ArrayList<Epic> getAllEpics();
+    ArrayList<Subtask> getAllSubtasks();
 
     //**Удаление всех задач
     void deleteAllTasks();
