@@ -1,4 +1,4 @@
-package com.yandex.TM.model;
+package com.yandex.tm.model;
 
 public class Task {
 

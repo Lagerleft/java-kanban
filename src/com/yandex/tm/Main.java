@@ -1,7 +1,7 @@
-package com.yandex.TM;
+package com.yandex.tm;
 
-import com.yandex.TM.model.*;
-import com.yandex.TM.service.TaskManager;
+import com.yandex.tm.model.*;
+import com.yandex.tm.service.TaskManager;
 
 public class Main {
 

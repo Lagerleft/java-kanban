@@ -1,9 +1,9 @@
-package com.yandex.TM.service;
+package com.yandex.tm.service;
 
-import com.yandex.TM.model.Epic;
-import com.yandex.TM.model.Statuses;
-import com.yandex.TM.model.Subtask;
-import com.yandex.TM.model.Task;
+import com.yandex.tm.model.Epic;
+import com.yandex.tm.model.Statuses;
+import com.yandex.tm.model.Subtask;
+import com.yandex.tm.model.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -123,8 +123,8 @@ public class TaskManager {
 
 //**Получение списка всех подзадач определенного эпика
 
-    public ArrayList<Task> getSubtasksForEpic(int epicID) {
-        ArrayList<Task> list = new ArrayList<>();
+    public ArrayList<Subtask> getSubtasksForEpic(int epicID) {
+        ArrayList<Subtask> list = new ArrayList<>();
         Epic epic = epics.get(epicID);
         for (Integer sID : epic.getSubtaskIDs()) {
             list.add(subtasks.get(sID));
@@ -134,7 +134,7 @@ public class TaskManager {
 
 //**Вспомогательные методы
 
-    public void deleteEpicAssignmentInSubtask(int epicID) {
+    private void deleteEpicAssignmentInSubtask(int epicID) {
         Epic tempEpic = epics.get(epicID);
         for (Integer id : tempEpic.getSubtaskIDs()) {
             subtasks.remove(id);
