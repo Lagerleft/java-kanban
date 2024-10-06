@@ -1,13 +1,15 @@
 package com.yandex.tm;
 
 import com.yandex.tm.model.*;
+import com.yandex.tm.service.Managers;
 import com.yandex.tm.service.TaskManager;
 
 public class Main {
 
     public static void main(String[] args) {
         System.out.println("Поехали!");
-        TaskManager manager = new TaskManager();
+
+        TaskManager manager = Managers.getDefault();
 
 //**Создать таски, эпик и сабтаски
         manager.createNewTask(new Task("Погреть еду", "Надо погреть еду перед завтраком", Statuses.NEW));
@@ -46,20 +48,20 @@ public class Main {
 //**Распечатать измененные таски, эпик и сабтаски поштучно
         System.out.println();
         System.out.println("Обновленный com.yandex.app.model.Epic: ");
-        System.out.println(manager.getEpicByGlobalID(3));
+        System.out.println(manager.getEpic(3));
         System.out.println();
         System.out.println("Обновленный com.yandex.app.model.Task: ");
-        System.out.println(manager.getTaskByGlobalID(1));
+        System.out.println(manager.getTask(1));
         System.out.println();
         System.out.println("Обновленный com.yandex.app.model.Subtask: ");
-        System.out.println(manager.getSubtaskByGlobalID(8));
+        System.out.println(manager.getSubtask(8));
 
 //**Распечатать и удалить эпик, распечатать сабтаски после удаления
         System.out.println();
         System.out.println("Распечатать и удалить эпик, распечатать сабтаски после удаления:");
-        System.out.println(manager.getEpicByGlobalID(4));
+        System.out.println(manager.getEpic(4));
         manager.deleteOneEpic(4);
-        System.out.println(manager.getEpicByGlobalID(4));
+        System.out.println(manager.getEpic(4));
         System.out.println();
         System.out.println("Список всех Subtasks: ");
         System.out.println(manager.getAllSubtasks());
@@ -73,6 +75,10 @@ public class Main {
         System.out.println(manager.getAllSubtasks());
         System.out.println("Сабтаски для эпика 3:");
         System.out.println(manager.getSubtasksForEpic(3));
+
+
+        System.out.println("История задач: ");
+        System.out.println(manager.getHistoryMan());
 
     }
 }
