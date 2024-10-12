@@ -1,5 +1,7 @@
 package com.yandex.tm.model;
 
+import java.util.Objects;
+
 public class Task {
 
     private String taskName;
@@ -30,6 +32,18 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", status=" + status +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (this.getClass() != obj.getClass()) return false;
+        Task anotherTask = (Task) obj;
+        return Objects.equals (taskID, anotherTask.taskID) &&
+                Objects.equals(taskName, anotherTask.taskName) &&
+                Objects.equals(description, anotherTask.description);
+
     }
 
 //**Геттеры по переменным com.yandex.app.model.Task

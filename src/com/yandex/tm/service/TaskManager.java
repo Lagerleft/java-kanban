@@ -11,6 +11,7 @@ public interface TaskManager {
     void createNewTask(Task task);
     void createNewEpic(Epic epic);
     void createNewSubtask(Subtask subtask);
+    void tasksDirectAdd(Integer key, Task value);
 
     //**Получение задач (tasks, epics, subtasks) по taskGlobalID в менеджере
     Task getTask(int taskID);
@@ -26,6 +27,7 @@ public interface TaskManager {
     ArrayList<Task> getAllTasks();
     ArrayList<Epic> getAllEpics();
     ArrayList<Subtask> getAllSubtasks();
+    ArrayList<Subtask> getSubtasksForEpic(int epicID);
 
     //**Удаление всех задач
     void deleteAllTasks();
@@ -36,8 +38,6 @@ public interface TaskManager {
     void deleteOneTask(int taskID);
     void deleteOneEpic(int epicID);
     void deleteOneSubtask(int subtaskID);
-
-    ArrayList<Subtask> getSubtasksForEpic(int epicID);
 
     //**История задач
     ArrayList<Task> getHistoryMan ();

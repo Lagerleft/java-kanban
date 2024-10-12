@@ -18,23 +18,35 @@ public class InMemoryTaskManager implements TaskManager {
     //**Создание задач (com.yandex.app.model.Task, com.yandex.app.model.Epic, com.yandex.app.model.Subtask) в менеджере
     @Override
     public void createNewTask(Task task) {
-        final int taskID = getTaskGlobalID();
-        tasks.put(taskID, task);
+        int taskID = getGlobalTaskID();
         task.setTaskID(taskID);
+        while (tasks.containsKey(task.getTaskID())) { //ключ уже есть в списке
+            task.setTaskID(getGlobalTaskID());
+        }
+        taskID = task.getTaskID();
+        tasks.put(taskID, task);
     }
 
     @Override
     public void createNewEpic(Epic epic) {
-        final int epicID = getTaskGlobalID();
-        epics.put(epicID, epic);
+        int epicID = getGlobalTaskID();
         epic.setTaskID(epicID);
+        while (epics.containsKey(epic.getTaskID())) { //ключ уже есть в списке
+            epic.setTaskID(getGlobalTaskID());
+        }
+        epicID = epic.getTaskID();
+        epics.put(epicID, epic);
     }
 
     @Override
     public void createNewSubtask(Subtask subtask) {
-        final int subtaskID = getTaskGlobalID();
-        subtasks.put(subtaskID, subtask);
+        int subtaskID = getGlobalTaskID();
         subtask.setTaskID(subtaskID);
+        while (subtasks.containsKey(subtask.getTaskID())) { //ключ уже есть в списке
+            subtask.setTaskID(getGlobalTaskID());
+        }
+        subtaskID = subtask.getTaskID();
+        subtasks.put(subtaskID, subtask);
         Epic tempEpic = epics.get(subtask.getEpicID());
         tempEpic.addSubtaskID(subtaskID);
         checkAndSetEpicStatus(subtask.getEpicID());
@@ -47,7 +59,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (task != null) {
             Task newTask = new Task(task.getTaskName(), task.getDescription(), task.getStatus());
             newTask.setTaskID(task.getTaskID());
-           historyMan.add(newTask);
+            historyMan.add(newTask);
         }
         return task;
     }
@@ -58,7 +70,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (epic != null) {
             Epic newEpic = new Epic(epic.getTaskName(), epic.getDescription());
             newEpic.setTaskID(epic.getTaskID());
-            newEpic.setSubtaskIDs (epic.getSubtaskIDs());
+            newEpic.setSubtaskIDs(epic.getSubtaskIDs());
             newEpic.setStatus(epic.getStatus());
             historyMan.add(newEpic);
         }
@@ -206,13 +218,24 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    //**Переопределение equals()
+
+
 //**Сеттеры и геттеры для переменных com.yandex.app.service.TaskManager
 
-    public int getTaskGlobalID() {
+    public int getGlobalTaskID() {
         return taskGlobalID++;
     }
 
-        public ArrayList<Task> getHistoryMan() {
+    public ArrayList<Task> getHistoryMan() {
         return historyMan.getHistory();
     }
+
+    public void tasksDirectAdd(Integer key, Task value) {
+        tasks.put(key, value);
+    }
+
+
 }
+
+
