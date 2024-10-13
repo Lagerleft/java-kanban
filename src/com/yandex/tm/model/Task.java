@@ -40,7 +40,7 @@ public class Task {
         if (obj == null) return false;
         if (this.getClass() != obj.getClass()) return false;
         Task anotherTask = (Task) obj;
-        return Objects.equals (taskID, anotherTask.taskID) &&
+        return Objects.equals(taskID, anotherTask.taskID) &&
                 Objects.equals(taskName, anotherTask.taskName) &&
                 Objects.equals(description, anotherTask.description);
 

@@ -7,24 +7,27 @@ import com.yandex.tm.model.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
     private int taskGlobalID = 1;
-    private final HashMap<Integer, Task> tasks = new HashMap<>();
-    private final HashMap<Integer, Epic> epics = new HashMap<>();
-    private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
-    private final HistoryManager historyMan = Managers.getDefaultHistory();
+    private final Map<Integer, Task> tasks = new HashMap<>();
+    private final Map<Integer, Epic> epics = new HashMap<>();
+    private final Map<Integer, Subtask> subtasks = new HashMap<>();
+    private final HistoryManager history = Managers.getDefaultHistory();
 
     //**Создание задач (com.yandex.app.model.Task, com.yandex.app.model.Epic, com.yandex.app.model.Subtask) в менеджере
     @Override
     public void createNewTask(Task task) {
-        int taskID = getGlobalTaskID();
-        task.setTaskID(taskID);
-        while (tasks.containsKey(task.getTaskID())) { //ключ уже есть в списке
-            task.setTaskID(getGlobalTaskID());
+        if(task.getTaskID() == 0) {
+            int taskID = getGlobalTaskID();
+            task.setTaskID(taskID);
+            while (tasks.containsKey(task.getTaskID())) { //ключ уже есть в списке
+                task.setTaskID(getGlobalTaskID());
+            }
         }
-        taskID = task.getTaskID();
-        tasks.put(taskID, task);
+        tasks.put(task.getTaskID(), task);
     }
 
     @Override
@@ -59,7 +62,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (task != null) {
             Task newTask = new Task(task.getTaskName(), task.getDescription(), task.getStatus());
             newTask.setTaskID(task.getTaskID());
-            historyMan.add(newTask);
+            history.add(newTask);
         }
         return task;
     }
@@ -72,7 +75,7 @@ public class InMemoryTaskManager implements TaskManager {
             newEpic.setTaskID(epic.getTaskID());
             newEpic.setSubtaskIDs(epic.getSubtaskIDs());
             newEpic.setStatus(epic.getStatus());
-            historyMan.add(newEpic);
+            history.add(newEpic);
         }
         return epic;
     }
@@ -83,7 +86,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (subtask != null) {
             Subtask newSubtask = new Subtask(subtask.getTaskName(), subtask.getDescription(), subtask.getStatus(), subtask.getEpicID());
             newSubtask.setTaskID(subtask.getTaskID());
-            historyMan.add(newSubtask);
+            history.add(newSubtask);
         }
         return subtask;
     }
@@ -115,17 +118,17 @@ public class InMemoryTaskManager implements TaskManager {
 
     //**Получение списка всех задач
     @Override
-    public ArrayList<Task> getAllTasks() {
+    public List<Task> getAllTasks() {
         return new ArrayList<>(tasks.values());
     }
 
     @Override
-    public ArrayList<Epic> getAllEpics() {
+    public List<Epic> getAllEpics() {
         return new ArrayList<Epic>(epics.values());
     }
 
     @Override
-    public ArrayList<Subtask> getAllSubtasks() {
+    public List<Subtask> getAllSubtasks() {
         return new ArrayList<Subtask>(subtasks.values());
     }
 
@@ -175,8 +178,8 @@ public class InMemoryTaskManager implements TaskManager {
 //**Получение списка всех подзадач определенного эпика
 
     @Override
-    public ArrayList<Subtask> getSubtasksForEpic(int epicID) {
-        ArrayList<Subtask> list = new ArrayList<>();
+    public List<Subtask> getSubtasksForEpic(int epicID) {
+        List<Subtask> list = new ArrayList<>();
         Epic epic = epics.get(epicID);
         for (Integer sID : epic.getSubtaskIDs()) {
             list.add(subtasks.get(sID));
@@ -195,7 +198,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     private void checkAndSetEpicStatus(int epicID) {
         Epic tempEpic = epics.get(epicID);
-        ArrayList<Integer> tempEpicSubtaskList = tempEpic.getSubtaskIDs();
+        List<Integer> tempEpicSubtaskList = tempEpic.getSubtaskIDs();
         boolean checkAllNew = true;
         boolean checkAllDone = true;
 
@@ -218,23 +221,15 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    //**Переопределение equals()
-
-
 //**Сеттеры и геттеры для переменных com.yandex.app.service.TaskManager
 
-    public int getGlobalTaskID() {
+    private int getGlobalTaskID() {
         return taskGlobalID++;
     }
 
-    public ArrayList<Task> getHistoryMan() {
-        return historyMan.getHistory();
+    public List<Task> getHistory() {
+        return history.getHistory();
     }
-
-    public void tasksDirectAdd(Integer key, Task value) {
-        tasks.put(key, value);
-    }
-
 
 }
 

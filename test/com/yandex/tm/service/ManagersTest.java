@@ -3,9 +3,7 @@ package com.yandex.tm.service;
 import com.yandex.tm.model.Statuses;
 import com.yandex.tm.model.Task;
 import org.junit.jupiter.api.Test;
-import com.yandex.tm.service.Managers;
-
-import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,7 +23,7 @@ class ManagersTest {
         HistoryManager hm = Managers.getDefaultHistory();
         Task task1 = new Task("Test5name", "Test5Description", Statuses.NEW, 1);
         hm.add(task1);
-        ArrayList<Task> historyTest = hm.getHistory();
+        List<Task> historyTest = hm.getHistory();
         assertNotNull(historyTest, "Хистори-менеджер не работает!");
     }
 }

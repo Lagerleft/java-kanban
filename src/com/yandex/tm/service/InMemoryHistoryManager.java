@@ -3,24 +3,24 @@ package com.yandex.tm.service;
 import com.yandex.tm.model.Task;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private final ArrayList<Task> history = new ArrayList<>();
+    private final int HISTORY_SIZE = 10;
+    private final List<Task> history = new ArrayList<>();
 
     @Override
     public void add(Task task) {
-        if (history.size() == 10) {
-            history.remove(9);
+        if (history.size() == HISTORY_SIZE) {
+            history.removeLast();
         }
         history.addFirst(task);
     }
 
     @Override
-    public ArrayList<Task> getHistory() {
-        if (history.isEmpty()) {
-            return null;
-        }
-        return history;
+    public List<Task> getHistory() {
+        List<Task> historyList = List.copyOf(history);
+        return historyList;
     }
 }

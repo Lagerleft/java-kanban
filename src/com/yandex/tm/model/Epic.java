@@ -1,10 +1,11 @@
 package com.yandex.tm.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Epic extends Task {
 
-    private ArrayList<Integer> subtaskIDs = new ArrayList<>();
+    private List<Integer> subtaskIDs = new ArrayList<>();
 
     //**Создание объекта com.yandex.app.model.Epic
     public Epic(String taskName, String description) {
@@ -39,7 +40,7 @@ public class Epic extends Task {
         this.subtaskIDs.remove((Integer) taskID);
     }
 
-    public ArrayList<Integer> getSubtaskIDs() {
+    public List<Integer> getSubtaskIDs() {
         return this.subtaskIDs;
     }
 
@@ -47,7 +48,7 @@ public class Epic extends Task {
         this.subtaskIDs.clear();
     }
 
-    public void setSubtaskIDs(ArrayList<Integer> subtaskIDs) {
+    public void setSubtaskIDs(List<Integer> subtaskIDs) {
         this.subtaskIDs = subtaskIDs;
     }
 
