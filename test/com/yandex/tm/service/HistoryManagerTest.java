@@ -40,7 +40,7 @@ class HistoryManagerTest {
         Task task1 = tManager.getHistory().getFirst();
         Task task2 = tManager.getHistory().get(1);
 
-        assertEquals("TstName10", task1.getTaskName(), "Некорректная запись в очередь!");
-        assertEquals("TstName11", task2.getTaskName(), "Некорректная запись в очередь!");
+        assertEquals("TstName11", task1.getTaskName(), "Некорректная запись в очередь!");
+        assertEquals("TstName12", task2.getTaskName(), "Некорректная запись в очередь!");
     }
 }
