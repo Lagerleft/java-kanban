@@ -31,10 +31,10 @@ class HistoryManagerTest {
     @Test
     void historyManagerLimitWorks() {
         TaskManager tManager = Managers.getDefault();
-        for (int i = 1; i < 13; i++) { //**Гененация задач
+        for (int i = 1; i < 15; i++) { //**Гененация задач
             tManager.createNewTask(new Task(("TstName" + i), "TstDesc", Statuses.NEW));
         }
-        for (int i = 0; i < 12; i++) { //** Чтение задач
+        for (int i = 0; i < 14; i++) { //** Чтение задач
             tManager.getTask(i);
         }
         Task task1 = tManager.getHistory().getFirst();

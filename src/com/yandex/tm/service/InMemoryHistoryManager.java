@@ -13,11 +13,11 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add(Task task) {
-        if (history.size() == HISTORY_SIZE) {
-            history.removeLast();
-        }
-        if ((entrySlot + 1) == HISTORY_SIZE) {
+        if (entrySlot == HISTORY_SIZE) {
             entrySlot = 0;
+        }
+        if (history.size() == HISTORY_SIZE) {
+            history.remove(entrySlot);
         }
         history.add(entrySlot, task);
         entrySlot++;
