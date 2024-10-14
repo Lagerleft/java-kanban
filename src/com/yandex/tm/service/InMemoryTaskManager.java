@@ -20,7 +20,7 @@ public class InMemoryTaskManager implements TaskManager {
     //**Создание задач (com.yandex.app.model.Task, com.yandex.app.model.Epic, com.yandex.app.model.Subtask) в менеджере
     @Override
     public void createNewTask(Task task) {
-        if(task.getTaskID() == 0) {
+        if (task.getTaskID() == 0) {
             int taskID = getGlobalTaskID();
             task.setTaskID(taskID);
             while (tasks.containsKey(task.getTaskID())) { //ключ уже есть в списке
@@ -227,6 +227,7 @@ public class InMemoryTaskManager implements TaskManager {
         return taskGlobalID++;
     }
 
+    @Override
     public List<Task> getHistory() {
         return history.getHistory();
     }

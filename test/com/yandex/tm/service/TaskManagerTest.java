@@ -25,7 +25,7 @@ class TaskManagerTest {
     @Test //2. Наследники Task равны друг другу, если равен их ID
     public void equalChildrenIfEqualIDs() {
         TaskManager tManager = Managers.getDefault();
-        Epic e1 = new Epic ("TestEpic Name", "TestEpic Description");
+        Epic e1 = new Epic("TestEpic Name", "TestEpic Description");
         tManager.createNewEpic(new Epic("TestEpic Name", "TestEpic Description"));
         Epic e2 = tManager.getEpic(1);
         e1.setTaskID(e2.getTaskID());
@@ -41,7 +41,8 @@ class TaskManagerTest {
 
     }
 
-    @Test //3. Эпик нельзя добавить в себя самого в виде подзадачи. Также 6. InMemoryTaskManager добавляет задачи разного типа и может найти их по ID
+    @Test
+    //3. Эпик нельзя добавить в себя самого в виде подзадачи. Также 6. InMemoryTaskManager добавляет задачи разного типа и может найти их по ID
     public void epicCannotBeAddedToItself() {
         TaskManager tManager = Managers.getDefault();
         tManager.createNewEpic(new Epic("TestEpic Name", "TestEpic Description"));
@@ -74,11 +75,36 @@ class TaskManagerTest {
         Task task = tManager.getTask(1);
 
         assertEquals("Test1name", task.getTaskName(), "Имя задачи не сохранилось!");
-        assertEquals("Test1Description", task.getDescription() , "Описание задачи не сохранилось!");
+        assertEquals("Test1Description", task.getDescription(), "Описание задачи не сохранилось!");
         assertEquals(1, task.getTaskID(), "ID задачи не сохранился!");
         assertEquals(Statuses.NEW, task.getStatus(), "Статус задачи не сохранился!");
     }
 
+    @Test
+    void epicStatusChangeWhenSubtaskChanges() { //** Эпик должен менять статус на при обновлении сабтасков
+        TaskManager tManager = Managers.getDefault();
+        tManager.createNewEpic(new Epic("TstEpic", "TstEpicDesc"));
+        Epic epic = tManager.getEpic(1);
+        assertEquals(Statuses.NEW, epic.getStatus(), "Статус эпика не NEW при создании");
 
+        tManager.createNewSubtask(new Subtask("Sub1Name", "Sub1Desc", Statuses.NEW, epic.getTaskID()));
+        tManager.createNewSubtask(new Subtask("Sub2Name", "Sub2Desc", Statuses.NEW, epic.getTaskID()));
+
+        Subtask sub1 = tManager.getSubtask(2);
+        Subtask sub2 = tManager.getSubtask(3);
+
+        sub1.setStatus(Statuses.IN_PROGRESS);
+        tManager.updateSubtask(sub1);
+        assertEquals(Statuses.IN_PROGRESS, epic.getStatus(), "Статус эпика не поменялся на IN PROGRESS");
+
+        sub1.setStatus(Statuses.DONE);
+        tManager.updateSubtask(sub1);
+        assertEquals(Statuses.IN_PROGRESS, epic.getStatus(), "Статус эпика должен был остаться IN PROGRESS");
+
+        sub2.setStatus(Statuses.DONE);
+        tManager.updateSubtask(sub2);
+        assertEquals(Statuses.DONE, epic.getStatus(), "Статус эпика не поменялся на DONE");
+
+    }
 
 }
